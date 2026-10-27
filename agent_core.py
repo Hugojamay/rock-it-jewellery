@@ -8,7 +8,8 @@ from niche_config import SEARCH_QUERIES, get_evaluator_prompt, CLIENT_NAME
 from database import init_db, is_already_processed, mark_as_processed
 from notifier import send_whatsapp_alert, send_email_alert
 
-client = OpenAI(api_key=Config.OPENAI_API_KEY)
+openai_key = getattr(Config, "OPENAI_API_KEY", None) or os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY", "")
+client = OpenAI(api_key=openai_key)
 
 def run_client_agent():
     print(f"🚀 Iniciando Agente Comercial Autónomo para: {CLIENT_NAME}...")
