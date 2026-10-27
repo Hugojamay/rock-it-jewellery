@@ -1,18 +1,22 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 import urllib.parse
 import json
+import streamlit as st
 from openai import OpenAI
 from config import Config # Utiliza las llaves generales de tu .env
 from niche_config import SEARCH_QUERIES, get_evaluator_prompt, CLIENT_NAME
 from database import init_db, is_already_processed, mark_as_processed
 from notifier import send_whatsapp_alert, send_email_alert
 
-openai_key = getattr(Config, "OPENAI_API_KEY", None) or os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY", "")
-client = OpenAI(api_key=openai_key)
-
 def run_client_agent():
     print(f"🚀 Iniciando Agente Comercial Autónomo para: {CLIENT_NAME}...")
+    
+    # Inicialización local y segura dentro de la función ejecutada por demanda (compatible con Python 3.14 en la nube)
+    openai_key = getattr(Config, "OPENAI_API_KEY", None) or os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY", "")
+    client = OpenAI(api_key=openai_key)
+    
     init_db()
     
     posts = []
